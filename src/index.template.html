@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beam on a roller and a collar</title>
+<!--INLINE_CSS-->
+</head>
+<body>
+<main class="stage" id="stage">
+<div class="fig-fill">
+<svg id="fig" viewBox="0 0 960 616" role="img" aria-label="Four diagrams of one beam. A horizontal beam runs from a roller support at A on the ground to a collar at C riding on a fixed vertical shaft, with a load at B you can drag by its round handle, and an applied couple moment off the left end. Beside and below it: the same beam as a single point carrying only the forces, the free-body diagram of the beam with both supports replaced by what they do, and the three forces drawn tip to tail."></svg>
+</div>
+<section id="controls" class="bar" aria-label="Applied couple moment">
+  <div class="ctl">
+    <div class="ctl-head"><label for="m-slider"><b>Applied couple</b></label> M<sub>1</sub> = <b id="m-readout" class="readout">60</b>&nbsp;N·m <span class="hint">(the load is dragged)</span></div>
+    <div class="zs">
+      <i class="zt"></i>
+      <input type="range" id="m-slider" min="-200" max="200" step="10" value="60">
+      <div class="zl"><span>−200&nbsp;N·m (clockwise)</span><span id="m-zero" class="zero-label">0&nbsp;N·m</span><span>+200&nbsp;N·m (counterclockwise)</span></div>
+    </div>
+  </div>
+  <p id="from-link" hidden></p>
+</section>
+</main>
+<!--INLINE_JS-->
+</body>
+</html>

@@ -1,0 +1,18 @@
+# No tokens, passwords, secrets or keys belong in this repo. Be explicit.
+.env
+.env.*
+*.pem
+*.key
+*secret*
+*token*
+*credential*
+*password*
+node_modules/
+.DS_Store
+.superpowers/
+.claude/
+# specs, plans and agent notes stay local (a spec is written to docs/superpowers/specs/, questions to questions.md)
+docs/superpowers/
+questions.md
+# dist/ is NOT ignored on purpose: GitHub Pages serves the built page from the repo, so the generated file must be committed.
+# If you do not serve the repo as it is, add `dist/` here.

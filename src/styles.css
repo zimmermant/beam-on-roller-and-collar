@@ -1,0 +1,91 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 6px 16px 6px;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #111827;
+  background: #ffffff;
+}
+h1 { margin: 0; font-size: 20px; line-height: 1.2; font-weight: 600; }
+h2 { margin: 0 0 4px; font-size: 15px; line-height: 1.3; font-weight: 600; }
+
+/* ---- page layout ---------------------------------------------------------
+   The four diagrams and one slider, nothing else. The figure is sized to FIT, not to fill: the svg
+   keeps its viewBox's aspect ratio (preserveAspectRatio defaults to "meet"), so it is as large as
+   the window allows and centred in whatever is left over. The page therefore never scrolls at any
+   size, and src/interact.js already reads that letterboxing when it turns a pointer position into
+   viewBox units, so dragging lands in the right place however the window is shaped. */
+body { margin: 0; padding: 0; height: 100vh; overflow: hidden; }
+.stage { box-sizing: border-box; height: 100%; padding: 6px 8px; display: flex; flex-direction: column; }
+/* An absolutely positioned svg inside a relative box: a flex child sizing an svg by its own aspect
+   ratio is unreliable across browsers, and this is not. */
+.fig-fill { flex: 1 1 auto; position: relative; min-height: 0; min-width: 0; }
+#fig { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* The one control, in a slim bar under the figure. */
+.bar { flex: 0 0 auto; max-width: 740px; width: 100%; margin: 4px auto 0; padding: 2px 12px 4px;
+       border: 1px solid #d5dbe3; border-radius: 8px; background: #f9fafb; }
+.hint { color: #718096; font-weight: 400; }
+/* A subscript is browser-default 83% of its parent, which at 15 px is 12.4 px -- close enough to the
+   12 px floor to be worth pinning rather than leaving to the browser. */
+#controls sub { font-size: 12px; line-height: 0; }
+
+/* ---- colours, the same values as COLORS in svg.js ---- */
+.c-load { color: #c53030; }
+.c-applied { color: #6b46c1; }
+.c-roller { color: #2b6cb0; }
+.c-collar { color: #2f855a; }
+
+/* ---- the figure's one interactive element: the load handle ----------------------------------
+   Every state it can be in is visible: at rest, hovered, grabbed and keyboard-focused. */
+#fig { touch-action: none; }
+#fig .load-handle { cursor: grab; transition: fill .08s, stroke-width .08s; }
+#fig .load-handle:hover { fill: #fed7d7; stroke-width: 4.6; }
+#fig .load-handle:focus { outline: none; }
+#fig .load-handle:focus-visible { stroke: #2b6cb0; stroke-width: 5.5; fill: #ebf8ff; }
+#fig.dragging .load-handle { cursor: grabbing; fill: #c53030; stroke-width: 5; }
+#fig.dragging { cursor: grabbing; }
+
+
+/* ---- sliders ----------------------------------------------------------- */
+.ctl { margin-bottom: 4px; }
+.ctl-head { font-size: 15px; line-height: 1.3; }
+.ctl-head label { cursor: pointer; }
+.readout { font-variant-numeric: tabular-nums; display: inline-block; min-width: 2.6em; text-align: right; }
+.zs { position: relative; padding-top: 2px; }
+/* The marked zero: a tick at the centre of the scale, and a label that lights up while the value is 0. */
+.zt { position: absolute; left: 50%; top: 2px; width: 2px; height: 26px; margin-left: -1px; background: #2f855a; border-radius: 1px; pointer-events: none; }
+.zs input[type=range] {
+  position: relative; z-index: 1; display: block; width: 100%; height: 26px; margin: 0; padding: 0;
+  background: transparent; cursor: pointer; -webkit-appearance: none; appearance: none;
+}
+.zs input[type=range]:focus { outline: none; }
+.zs input[type=range]::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: #a0aec0; }
+.zs input[type=range]::-moz-range-track { height: 6px; border-radius: 3px; background: #a0aec0; }
+.zs input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none; box-sizing: border-box; width: 22px; height: 22px; margin-top: -8px; border-radius: 50%;
+  background: #ffffff; border: 3px solid #2d3748; box-shadow: 0 1px 3px #0004; transition: transform .08s, background .08s, border-color .08s;
+}
+.zs input[type=range]::-moz-range-thumb {
+  box-sizing: border-box; width: 22px; height: 22px; border-radius: 50%; background: #ffffff; border: 3px solid #2d3748; box-shadow: 0 1px 3px #0004;
+  transition: transform .08s, background .08s, border-color .08s;
+}
+.zs input[type=range]:hover::-webkit-slider-runnable-track { background: #718096; }
+.zs input[type=range]:hover::-moz-range-track { background: #718096; }
+.zs input[type=range]:hover::-webkit-slider-thumb { background: #ebf8ff; border-color: #2b6cb0; transform: scale(1.12); }
+.zs input[type=range]:hover::-moz-range-thumb { background: #ebf8ff; border-color: #2b6cb0; transform: scale(1.12); }
+.zs input[type=range]:active::-webkit-slider-thumb { background: #2b6cb0; border-color: #2c5282; transform: scale(1.2); }
+.zs input[type=range]:active::-moz-range-thumb { background: #2b6cb0; border-color: #2c5282; transform: scale(1.2); }
+.zs input[type=range]:focus-visible::-webkit-slider-thumb { border-color: #2b6cb0; box-shadow: 0 0 0 4px #2b6cb066; }
+.zs input[type=range]:focus-visible::-moz-range-thumb { border-color: #2b6cb0; box-shadow: 0 0 0 4px #2b6cb066; }
+.zl { position: relative; display: flex; justify-content: space-between; margin-top: 1px; font-size: 13px; line-height: 1.3; opacity: .9; }
+/* The marked zero: a label at its place that lights up while the slider sits on it. There is no
+   `mark` field on this page -- the applied couple's special value IS its snapped zero -- so there is
+   no .mark-label rule here to go stale. */
+.zl .zero-label {
+  position: absolute; left: 50%; transform: translateX(-50%); padding: 0 8px; font-weight: 700; color: #2f855a;
+  border-radius: 10px; transition: background .1s, color .1s;
+}
+.zl .zero-label.on { background: #2f855a; color: #ffffff; }
+
